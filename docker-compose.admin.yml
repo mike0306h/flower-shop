@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123
+      - POSTGRES_DB=flower_shop
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ../flower-shop-backend
+      dockerfile: Dockerfile
+    ports:
+      - "3457:3457"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres123@flower-shop-postgres-1:5432/flower_shop
+      - JWT_SECRET=flower-shop-secret-key-2024
+    depends_on:
+      - postgres
+    restart: on-failure
+    volumes:
+      - backend_uploads:/app/static/uploads
+
+  frontend:
+    build:
+      context: ../flower-shop-admin
+      dockerfile: Dockerfile
+    ports:
+      - "3458:80"
+    depends_on:
+      - backend
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+volumes:
+  postgres_data:
+  backend_uploads:
