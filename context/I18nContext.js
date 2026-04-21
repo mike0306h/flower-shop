@@ -963,8 +963,33 @@ const translations = {
 
 export function I18nProvider({ children }) {
   const [lang, setLang] = useState('zh')
+  const [shopName, setShopName] = useState({})
+
+  // 动态从 API 读取店铺名称
+  useEffect(() => {
+    fetch('/api/shop-info')
+      .then(r => r.json())
+      .then(data => {
+        if (data.shop_name) {
+          setShopName({
+            zh: data.shop_name,
+            th: data.shop_name,
+            en: data.shop_name,
+          })
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   const t = (key, params = {}) => {
+    // shop_name 用动态值
+    if (key === 'shop_name' && shopName[lang]) {
+      let text = shopName[lang]
+      Object.entries(params).forEach(([k, v]) => {
+        text = text.replace(`{${k}}`, v)
+      })
+      return text
+    }
     let text = translations[lang]?.[key] || translations['zh'][key] || key
     Object.entries(params).forEach(([k, v]) => {
       text = text.replace(`{${k}}`, v)

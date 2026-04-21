@@ -127,8 +127,9 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>🌸 遇见花语 - Floral Shop</title>
-        <meta name="description" content="遇见花语 - 精品花店" />
+        <title>🌸 {shopInfo?.shop_name || '花店'} - Floral Shop</title>
+        <meta name="description" content={shopInfo?.seo_description || '专业花店，提供鲜花定制、生日花束、婚礼花艺等服务'} />
+        {shopInfo?.seo_keywords && <meta name="keywords" content={shopInfo.seo_keywords} />}
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
