@@ -1,22 +1,34 @@
+# SSR 模式 - Next.js Node.js 服务器
 FROM node:22-alpine AS builder
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
+
+# 接收构建参数
 ARG NEXT_PUBLIC_API_URL=https://api.bkkflowers.com
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
+# 安装依赖并构建
 COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM nginx:alpine
-RUN apk add --no-cache tzdata
+# 生产运行阶段
+FROM node:22-alpine
+WORKDIR /app
 
-# Copy nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
-# Copy static files (.next directory, not _next)
-COPY --from=builder /app/.next/static /usr/share/nginx/html/.next/static
-COPY --from=builder /app/.next/server/pages /usr/share/nginx/html
+# 只复制必要文件
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static/
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package*.json ./
 
-# Copy next.js build artifacts
-COPY --from=builder /app/.next /usr/share/nginx/html/.next
+EXPOSE 3000
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+CMD ["node", "server.js"]

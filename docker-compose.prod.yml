@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: https://api.bkkflowers.com
+    container_name: flower-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - flower-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: flower-backend
+    restart: unless-stopped
+    ports:
+      - "3457:3457"
+    networks:
+      - flower-network
+    volumes:
+      - ./backend:/app
+
+  admin:
+    build:
+      context: ./flower-shop-admin
+      dockerfile: Dockerfile
+    container_name: flower-admin
+    restart: unless-stopped
+    ports:
+      - "3458:80"
+    networks:
+      - flower-network
+
+networks:
+  flower-network:
+    driver: bridge
