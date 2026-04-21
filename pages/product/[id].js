@@ -217,7 +217,7 @@ export default function ProductDetail() {
         <Lightbox src={lightboxSrc} alt={product?.name} onClose={() => setLightboxSrc(null)} />
       )}
       <Head>
-        <title>{product?.name} - 遇见花语</title>
+        <title>{product?.name} - {t('shop_name')}</title>
       </Head>
       <Toast />
       <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white pb-16">

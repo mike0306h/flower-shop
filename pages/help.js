@@ -98,7 +98,7 @@ export default function Help() {
   return (
     <>
       <Head>
-        <title>帮助中心 - 遇见花语</title>
+        <title>帮助中心 - {t('shop_name')}</title>
       </Head>
 
       <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
@@ -181,7 +181,7 @@ export default function Help() {
         {/* Footer */}
         <footer className="bg-gray-900 text-white py-8 mt-12">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <p className="text-gray-400">© 2024 遇见花语 Floral Shop. All rights reserved.</p>
+            <p className="text-gray-400">© 2026 {t('shop_name')} Floral Shop. All rights reserved.</p>
           </div>
         </footer>
       </div>

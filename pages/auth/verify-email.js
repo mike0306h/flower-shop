@@ -88,14 +88,14 @@ export default function VerifyEmail() {
 
   return (
     <>
-      <Head><title>邮箱验证 - 遇见花语</title></Head>
+      <Head><title>邮箱验证 - {t('shop_name')}</title></Head>
       <Toast />
       <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white flex items-center justify-center p-4">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2">
               <span className="text-4xl">🌸</span>
-              <span className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">遇见花语</span>
+              <span className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">{t('shop_name')}</span>
             </Link>
           </div>
           <div className="bg-white rounded-3xl shadow-xl p-8 text-center">

@@ -141,7 +141,7 @@ export default function OrderTracking() {
   if (loading) {
     return (
       <>
-        <Head><title>{t('track_order')} - 遇见花语</title></Head>
+        <Head><title>{t('track_order')} - {t('shop_name')}</title></Head>
         <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
           <Header />
           <div className="max-w-2xl mx-auto px-4 py-12 text-center">
@@ -158,7 +158,7 @@ export default function OrderTracking() {
   if (!order) {
     return (
       <>
-        <Head><title>{t('track_order')} - 遇见花语</title></Head>
+        <Head><title>{t('track_order')} - {t('shop_name')}</title></Head>
         <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
           <Header />
           <div className="max-w-2xl mx-auto px-4 py-12 text-center">
@@ -224,7 +224,7 @@ export default function OrderTracking() {
       {lightboxSrc && (
         <Lightbox src={lightboxSrc} alt="放大图片" onClose={() => setLightboxSrc(null)} />
       )}
-      <Head><title>{t('track_order')} - 遇见花语</title></Head>
+      <Head><title>{t('track_order')} - {t('shop_name')}</title></Head>
       <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
         <Header />
 

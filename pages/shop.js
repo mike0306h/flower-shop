@@ -127,7 +127,7 @@ export default function Shop() {
 
   return (
     <>
-      <Head><title>{t('flower_selection')} - 遇见花语</title></Head>
+      <Head><title>{t('flower_selection')} - {t('shop_name')}</title></Head>
       <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white pb-16">
         <Header />
 

@@ -1007,7 +1007,7 @@ export function I18nProvider({ children, initialShopInfo }) {
   }
 
   return (
-    <I18nContext.Provider value={{ lang, setLang, t }}>
+    <I18nContext.Provider value={{ lang, setLang, t, shopName }}>
       {children}
     </I18nContext.Provider>
   )

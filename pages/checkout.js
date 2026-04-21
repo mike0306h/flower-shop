@@ -69,7 +69,7 @@ export default function Checkout() {
   if (!isLoggedIn && !orderPlaced) {
     return (
       <>
-        <Head><title>{t('checkout_title')} - 遇见花语</title></Head>
+        <Head><title>{t('checkout_title')} - {t('shop_name')}</title></Head>
         <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
           <Header />
           <div className="max-w-md mx-auto px-4 py-16 text-center">
@@ -98,7 +98,7 @@ export default function Checkout() {
   if (cart.length === 0 && !orderPlaced) {
     return (
       <>
-        <Head><title>{t('checkout_title')} - 遇见花语</title></Head>
+        <Head><title>{t('checkout_title')} - {t('shop_name')}</title></Head>
         <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
           <Header />
           <div className="max-w-2xl mx-auto px-4 py-16 text-center">
@@ -215,7 +215,7 @@ export default function Checkout() {
   if (orderPlaced) {
     return (
       <>
-        <Head><title>{t('order_success')} - 遇见花语</title></Head>
+        <Head><title>{t('order_success')} - {t('shop_name')}</title></Head>
         <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
           <Header />
           <div className="max-w-xl mx-auto px-4 py-16 text-center">
@@ -246,7 +246,7 @@ export default function Checkout() {
       {lightboxSrc && (
         <Lightbox src={lightboxSrc} alt="商品图片" onClose={() => setLightboxSrc(null)} />
       )}
-      <Head><title>{t('checkout_title')} - 遇见花语</title></Head>
+      <Head><title>{t('checkout_title')} - {t('shop_name')}</title></Head>
       <Toast />
       <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white pb-16">
         <Header />

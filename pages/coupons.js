@@ -66,7 +66,7 @@ export default function Coupons() {
 
   return (
     <>
-      <Head><title>优惠券 - 遇见花语</title></Head>
+      <Head><title>优惠券 - {t('shop_name')}</title></Head>
       <Toast />
       <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white pb-16">
         <Header />

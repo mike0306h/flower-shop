@@ -134,7 +134,7 @@ export default function Profile() {
   if (!isLoggedIn) {
     return (
       <>
-        <Head><title>{t('profile')} - 遇见花语</title></Head>
+        <Head><title>{t('profile')} - {t('shop_name')}</title></Head>
         <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white flex items-center justify-center p-4">
           <div className="text-center">
             <span className="text-8xl block mb-6">🔐</span>
@@ -154,7 +154,7 @@ export default function Profile() {
       {lightboxSrc && (
         <Lightbox src={lightboxSrc} alt="放大图片" onClose={() => setLightboxSrc(null)} />
       )}
-      <Head><title>{t('profile')} - 遇见花语</title></Head>
+      <Head><title>{t('profile')} - {t('shop_name')}</title></Head>
       <Toast />
       <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white pb-16">
         <Header />

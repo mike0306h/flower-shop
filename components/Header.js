@@ -24,7 +24,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2">
             <span className="text-3xl">🌸</span>
             <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
-              遇见花语
+              {t('shop_name')}
             </h1>
           </Link>
 
