@@ -961,12 +961,21 @@ const translations = {
   }
 }
 
-export function I18nProvider({ children }) {
+export function I18nProvider({ children, initialShopInfo }) {
   const [lang, setLang] = useState('zh')
-  const [shopName, setShopName] = useState({})
+  const [shopName, setShopName] = useState(initialShopInfo?.shop_name || {})
 
-  // 动态从 API 读取店铺名称
+  // 店铺名称从 props 初始化，动态更新时用 API
   useEffect(() => {
+    if (initialShopInfo?.shop_name) {
+      setShopName({
+        zh: initialShopInfo.shop_name,
+        th: initialShopInfo.shop_name,
+        en: initialShopInfo.shop_name,
+      })
+      return
+    }
+    // props 没有则从 API 读
     fetch('/api/shop-info')
       .then(r => r.json())
       .then(data => {
@@ -979,7 +988,7 @@ export function I18nProvider({ children }) {
         }
       })
       .catch(() => {})
-  }, [])
+  }, [initialShopInfo])
 
   const t = (key, params = {}) => {
     // shop_name 用动态值
