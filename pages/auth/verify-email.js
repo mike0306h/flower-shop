@@ -10,35 +10,73 @@ import Toast from '../../components/Toast'
 
 export default function VerifyEmail() {
   const router = useRouter()
-  const { t, lang } = useI18n()
+  const { t } = useI18n()
   const [status, setStatus] = useState('loading')
   const [message, setMessage] = useState('')
-  const [email, setEmail] = useState('')
+  const [autoLoginDone, setAutoLoginDone] = useState(false)
 
   useEffect(() => {
     const code = router.query.code
-    if (code) {
-      verifyEmailCode(code)
-        .then((res) => {
-          if (res.success) {
-            setStatus('success')
-            setEmail(res.user?.email || '')
-            setTimeout(() => {
-              router.push('/login')
-            }, 3000)
-          } else {
-            setStatus('error')
-            setMessage(res.message || '验证失败')
-          }
-        })
-        .catch((err) => {
-          setStatus('error')
-          setMessage(err.response?.data?.detail || '验证码无效或已过期')
-        })
-    } else {
+    if (!code) {
       setStatus('error')
       setMessage('无效的验证链接')
+      return
     }
+
+    verifyEmailCode(code)
+      .then(async (res) => {
+        if (res.success) {
+          const email = res.email || res.user?.email
+          if (!email) {
+            setStatus('error')
+            setMessage('验证成功，但无法获取邮箱信息')
+            return
+          }
+
+          // 从 sessionStorage 读取注册时保存的临时数据
+          const stored = sessionStorage.getItem('pending_register')
+          if (stored) {
+            const { name, phone, password } = JSON.parse(stored)
+            sessionStorage.removeItem('pending_register')
+
+            // 直接调用注册 API，自动登录
+            try {
+              const { register: apiRegister } = await import('../../services/api')
+              const regRes = await apiRegister({ name, email, phone, password })
+              if (regRes.token && regRes.user) {
+                // 存储登录状态
+                localStorage.setItem('flower_user_token', regRes.token)
+                localStorage.setItem('flower_user', JSON.stringify(regRes.user))
+                setAutoLoginDone(true)
+                setStatus('success')
+                setMessage('🎉 注册成功！正在进入您的账户...')
+                // 强制刷新让 AuthContext 恢复状态
+                setTimeout(() => { router.push('/profile') }, 500)
+                return
+              }
+            } catch (e) {
+              console.error('Auto register failed:', e)
+              // 注册失败可能已注册过，直接跳转登录
+              setStatus('success')
+              setMessage('邮箱验证成功！即将跳转登录...')
+              setTimeout(() => { router.push('/login') }, 2000)
+              return
+            }
+          }
+
+          // 没有临时数据 → 跳转登录
+          setStatus('success')
+          setMessage('邮箱验证成功！即将跳转登录...')
+          setTimeout(() => { router.push('/login') }, 2000)
+        } else {
+          setStatus('error')
+          setMessage(res.message || '验证失败')
+        }
+      })
+      .catch((err) => {
+        setStatus('error')
+        setMessage(err.response?.data?.detail || '验证码无效或已过期')
+      })
   }, [router.query.code])
 
   const statusConfig = {
@@ -64,12 +102,15 @@ export default function VerifyEmail() {
             <div className={'text-6xl mb-4 ' + config.color}>{config.icon}</div>
             <h2 className={'text-2xl font-bold mb-4 ' + config.color}>{config.title}</h2>
             <p className="text-gray-600 mb-6">
-              {status === 'success' && '邮箱验证成功！'}
+              {status === 'success' && (message || '邮箱验证成功！')}
               {status === 'error' && message}
               {status === 'loading' && '正在验证您的邮箱，请稍候...'}
             </p>
-            {status === 'success' && (
-              <p className="text-gray-500 text-sm mb-6">页面将自动跳转到登录页...</p>
+            {status === 'success' && !autoLoginDone && (
+              <p className="text-gray-500 text-sm mb-6">页面将自动跳转...</p>
+            )}
+            {status === 'success' && autoLoginDone && (
+              <p className="text-green-500 text-sm mb-6 font-medium">🎉 注册成功！正在进入您的账户...</p>
             )}
             {status === 'error' && (
               <div className="space-y-4">

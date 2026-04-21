@@ -39,11 +39,9 @@ export default function Login() {
     if (!validate()) return
 
     setLoading(true)
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    const result = login(formData.email, formData.password)
+    const result = await login(formData.email, formData.password)
     if (result.success) {
-      router.push('/checkout')
+      router.push('/profile')
     } else {
       setErrors({ form: result.error })
     }

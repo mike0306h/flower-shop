@@ -52,10 +52,18 @@ export default function Register() {
       setErrors({ email: t('enter_email') })
       return
     }
-    
+    if (!validate()) return
+
     setSendLoading(true)
     try {
       await sendVerifyEmail(formData.email)
+      // 保存注册信息到 sessionStorage，邮箱验证成功后自动注册
+      sessionStorage.setItem('pending_register', JSON.stringify({
+        name: formData.name,
+        phone: formData.phone,
+        password: formData.password,
+        email: formData.email,
+      }))
       setEmailSent(true)
       setStep(2)
     } catch (err) {
