@@ -963,31 +963,34 @@ const translations = {
 
 export function I18nProvider({ children, initialShopInfo }) {
   const [lang, setLang] = useState('zh')
-  const [shopName, setShopName] = useState(initialShopInfo?.shop_name || {})
-
-  // 店铺名称从 props 初始化，动态更新时用 API
-  useEffect(() => {
+  const [shopName, setShopName] = useState(() => {
     if (initialShopInfo?.shop_name) {
-      setShopName({
+      return {
         zh: initialShopInfo.shop_name,
         th: initialShopInfo.shop_name,
         en: initialShopInfo.shop_name,
-      })
-      return
+      }
     }
-    // props 没有则从 API 读
-    fetch('/api/shop-info')
-      .then(r => r.json())
-      .then(data => {
-        if (data.shop_name) {
-          setShopName({
-            zh: data.shop_name,
-            th: data.shop_name,
-            en: data.shop_name,
-          })
-        }
-      })
-      .catch(() => {})
+    return {}
+  })
+
+  // 店铺名称从 props 初始化，动态更新时用 API
+  useEffect(() => {
+    if (!initialShopInfo?.shop_name) {
+      // props 没有则从 API 读
+      fetch('/api/shop-info')
+        .then(r => r.json())
+        .then(data => {
+          if (data.shop_name) {
+            setShopName({
+              zh: data.shop_name,
+              th: data.shop_name,
+              en: data.shop_name,
+            })
+          }
+        })
+        .catch(() => {})
+    }
   }, [initialShopInfo])
 
   const t = (key, params = {}) => {
