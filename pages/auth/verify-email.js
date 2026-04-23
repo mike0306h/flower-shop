@@ -51,7 +51,7 @@ export default function VerifyEmail() {
                 setStatus('success')
                 setMessage('🎉 注册成功！正在进入您的账户...')
                 // 强制刷新让 AuthContext 恢复状态
-                setTimeout(() => { router.push('/profile') }, 500)
+                setTimeout(() => { window.location.href = '/profile' }, 500)
                 return
               }
             } catch (e) {
@@ -59,7 +59,7 @@ export default function VerifyEmail() {
               // 注册失败可能已注册过，直接跳转登录
               setStatus('success')
               setMessage('邮箱验证成功！即将跳转登录...')
-              setTimeout(() => { router.push('/login') }, 2000)
+              setTimeout(() => { window.location.href = '/login' }, 2000)
               return
             }
           }
@@ -67,7 +67,7 @@ export default function VerifyEmail() {
           // 没有临时数据 → 跳转登录
           setStatus('success')
           setMessage('邮箱验证成功！即将跳转登录...')
-          setTimeout(() => { router.push('/login') }, 2000)
+          setTimeout(() => { window.location.href = '/login' }, 2000)
         } else {
           setStatus('error')
           setMessage(res.message || '验证失败')
