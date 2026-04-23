@@ -53,7 +53,7 @@ export default function Register() {
     if (!formData.email) errs.email = t('enter_email')
     if (!formData.phone) errs.phone = t('enter_phone')
     if (!formData.password) errs.password = t('enter_password')
-    if (formData.password.length < 6) errs.password = t('password_too_short')
+    if (formData.password.length < 8) errs.password = t('password_too_short')
     if (formData.password !== formData.confirmPassword) {
       errs.confirmPassword = t('password_mismatch')
     }
@@ -71,8 +71,8 @@ export default function Register() {
     setSendLoading(true)
     try {
       await sendVerifyEmail(formData.email)
-      // 保存注册信息到 sessionStorage，邮箱验证成功后自动注册
-      sessionStorage.setItem('pending_register', JSON.stringify({
+      // 保存注册信息到 localStorage，邮箱验证成功后自动注册
+      localStorage.setItem('pending_register', JSON.stringify({
         name: formData.name,
         phone: formData.phone,
         password: formData.password,
@@ -81,7 +81,7 @@ export default function Register() {
       setEmailSent(true)
       setStep(2)
     } catch (err) {
-      const detail = err.response?.data?.detail || '发送失败'
+      const detail = err.response?.data?.detail || t('verify_email_failed_send')
       if (detail.includes('已注册')) {
         setErrors({ email: detail })
       } else {
@@ -226,7 +226,7 @@ export default function Register() {
                   disabled={sendLoading}
                   className="w-full py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-pink-200 transition-all disabled:opacity-50 mt-6"
                 >
-                  {sendLoading ? '发送中...' : '发送验证邮件'}
+                  {sendLoading ? t('sending') : t('send_verify_email')}
                 </button>
               </form>
 
@@ -243,17 +243,16 @@ export default function Register() {
             <div className="bg-white rounded-3xl shadow-xl p-8">
               <div className="text-center mb-6">
                 <div className="text-5xl mb-4">📧</div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-2">验证邮箱</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('verify_email')}</h2>
                 <p className="text-gray-500">
-                  我们已发送验证邮件到<br/>
+                  {t('verify_email_sent')}<br/>
                   <span className="font-bold text-pink-500">{formData.email}</span>
                 </p>
               </div>
 
               <div className="bg-pink-50 rounded-xl p-4 mb-6">
                 <p className="text-sm text-gray-600">
-                  请点击邮件中的链接完成验证，验证后即可完成注册。<br/>
-                  如果没有收到邮件，请检查垃圾邮件文件夹。
+                  {t('verify_email_instr')}
                 </p>
               </div>
 
@@ -261,14 +260,14 @@ export default function Register() {
                 onClick={() => setStep(1)}
                 className="w-full py-3 border border-pink-300 text-pink-500 font-medium rounded-xl hover:bg-pink-50 transition-all mb-3"
               >
-                修改邮箱
+                {t('change_email')}
               </button>
 
               <p className="text-center text-gray-500 text-sm">
                 {countdown > 0 ? (
-                  <span>{countdown}秒后自动跳转登录页面...</span>
+                  <span>{t('auto_redirect_desc').replace('{count}', countdown)}</span>
                 ) : (
-                  <Link href="/login" className="text-pink-500 font-medium hover:underline">返回登录</Link>
+                  <Link href="/login" className="text-pink-500 font-medium hover:underline">{t('login_link')}</Link>
                 )}
               </p>
             </div>

@@ -14,12 +14,13 @@ export default function VerifyEmail() {
   const [status, setStatus] = useState('loading')
   const [message, setMessage] = useState('')
   const [autoLoginDone, setAutoLoginDone] = useState(false)
+  const [verifiedEmail, setVerifiedEmail] = useState('')
 
   useEffect(() => {
     const code = router.query.code
     if (!code) {
       setStatus('error')
-      setMessage('无效的验证链接')
+      setMessage(t('verify_invalid_link'))
       return
     }
 
@@ -29,15 +30,17 @@ export default function VerifyEmail() {
           const email = res.email || res.user?.email
           if (!email) {
             setStatus('error')
-            setMessage('验证成功，但无法获取邮箱信息')
+            setMessage(t('verify_no_email_info'))
             return
           }
 
-          // 从 sessionStorage 读取注册时保存的临时数据
-          const stored = sessionStorage.getItem('pending_register')
+          setVerifiedEmail(email)
+
+          // 从 localStorage 读取注册时保存的临时数据
+          const stored = localStorage.getItem('pending_register')
           if (stored) {
             const { name, phone, password } = JSON.parse(stored)
-            sessionStorage.removeItem('pending_register')
+            localStorage.removeItem('pending_register')
 
             // 直接调用注册 API，自动登录
             try {
@@ -49,46 +52,45 @@ export default function VerifyEmail() {
                 localStorage.setItem('flower_user', JSON.stringify(regRes.user))
                 setAutoLoginDone(true)
                 setStatus('success')
-                setMessage('🎉 注册成功！正在进入您的账户...')
-                // 强制刷新让 AuthContext 恢复状态
-                setTimeout(() => { window.location.href = '/profile' }, 500)
+                setMessage(t('verify_auto_login_msg'))
+                setTimeout(() => { router.push('/profile') }, 500)
                 return
               }
             } catch (e) {
               console.error('Auto register failed:', e)
               // 注册失败可能已注册过，直接跳转登录
               setStatus('success')
-              setMessage('邮箱验证成功！即将跳转登录...')
-              setTimeout(() => { window.location.href = '/login' }, 2000)
+              setMessage(t('verify_email_success_msg'))
+              setTimeout(() => { router.push('/login') }, 2000)
               return
             }
           }
 
           // 没有临时数据 → 跳转登录
           setStatus('success')
-          setMessage('邮箱验证成功！即将跳转登录...')
-          setTimeout(() => { window.location.href = '/login' }, 2000)
+          setMessage(t('verify_email_success_msg'))
+          setTimeout(() => { router.push('/login') }, 2000)
         } else {
           setStatus('error')
-          setMessage(res.message || '验证失败')
+          setMessage(res.message || t('verify_error_title'))
         }
       })
       .catch((err) => {
         setStatus('error')
-        setMessage(err.response?.data?.detail || '验证码无效或已过期')
+        setMessage(err.response?.data?.detail || t('verify_code_error'))
       })
   }, [router.query.code])
 
   const statusConfig = {
-    loading: { icon: '⏳', title: '验证中...', color: 'text-blue-500' },
-    success: { icon: '✅', title: '邮箱验证成功！', color: 'text-green-500' },
-    error: { icon: '❌', title: '验证失败', color: 'text-red-500' }
+    loading: { icon: '⏳', title: t('verify_loading'), color: 'text-blue-500' },
+    success: { icon: '✅', title: t('verify_success_title'), color: 'text-green-500' },
+    error: { icon: '❌', title: t('verify_error_title'), color: 'text-red-500' }
   }
   const config = statusConfig[status]
 
   return (
     <>
-      <Head><title>邮箱验证 - {t('shop_name')}</title></Head>
+      <Head><title>{t('verify_email')} - {t('shop_name')}</title></Head>
       <Toast />
       <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white flex items-center justify-center p-4">
         <div className="w-full max-w-md">
@@ -102,21 +104,21 @@ export default function VerifyEmail() {
             <div className={'text-6xl mb-4 ' + config.color}>{config.icon}</div>
             <h2 className={'text-2xl font-bold mb-4 ' + config.color}>{config.title}</h2>
             <p className="text-gray-600 mb-6">
-              {status === 'success' && (message || '邮箱验证成功！')}
+              {status === 'success' && (message || t('verify_success_title'))}
               {status === 'error' && message}
-              {status === 'loading' && '正在验证您的邮箱，请稍候...'}
+              {status === 'loading' && t('verify_loading')}
             </p>
             {status === 'success' && !autoLoginDone && (
-              <p className="text-gray-500 text-sm mb-6">页面将自动跳转...</p>
+              <p className="text-gray-500 text-sm mb-6">{t('verify_redirecting')}</p>
             )}
             {status === 'success' && autoLoginDone && (
-              <p className="text-green-500 text-sm mb-6 font-medium">🎉 注册成功！正在进入您的账户...</p>
+              <p className="text-green-500 text-sm mb-6 font-medium">🎉 {t('verify_auto_login_msg')}</p>
             )}
             {status === 'error' && (
               <div className="space-y-4">
-                <p className="text-gray-500 text-sm">请返回注册页面重新获取验证邮件</p>
+                <p className="text-gray-500 text-sm">{t('retry_verify')}</p>
                 <Link href="/register" className="inline-block w-full py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-pink-200 transition-all">
-                  返回注册
+                  {t('back_to_register')}
                 </Link>
               </div>
             )}
