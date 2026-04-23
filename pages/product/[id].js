@@ -95,7 +95,7 @@ export default function ProductDetail() {
   const handleSubmitReview = async (e) => {
     e.preventDefault()
     if (!reviewComment.trim()) {
-      alert('请输入评价内容')
+      alert(t('please_enter_review'))
       return
     }
     setSubmittingReview(true)
@@ -114,7 +114,7 @@ export default function ProductDetail() {
       setTimeout(() => setReviewSuccess(false), 3000)
     } catch (err) {
       console.error('Failed to submit review:', err)
-      alert(err?.response?.data?.detail || '提交评价失败，请稍后重试')
+      alert(err?.response?.data?.detail || t('submit_review_error'))
     } finally {
       setSubmittingReview(false)
     }
@@ -388,20 +388,20 @@ export default function ProductDetail() {
             <div className="bg-white rounded-2xl shadow-sm p-8">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-800">商品评价</h3>
-                  <p className="text-gray-500 text-sm mt-1">查看其他用户的真实评价</p>
+                  <h3 className="text-2xl font-bold text-gray-800">{t('product_reviews')}</h3>
+                  <p className="text-gray-500 text-sm mt-1">{t('view_other_reviews')}</p>
                 </div>
                 {!showReviewForm && isLoggedIn && (
                   <button
                     onClick={() => setShowReviewForm(true)}
                     className="px-5 py-2 bg-pink-500 text-white rounded-xl hover:bg-pink-600 transition-colors font-medium"
                   >
-                    写评价
+                    {t('write_review')}
                   </button>
                 )}
                 {!isLoggedIn && (
                   <Link href="/login" className="px-5 py-2 border border-pink-500 text-pink-500 rounded-xl hover:bg-pink-50 transition-colors font-medium">
-                    登录后写评价
+                    {t('login_to_review')}
                   </Link>
                 )}
               </div>
@@ -410,7 +410,7 @@ export default function ProductDetail() {
               {showReviewForm && (
                 <form onSubmit={handleSubmitReview} className="bg-pink-50 rounded-xl p-6 mb-6">
                   <div className="mb-4">
-                    <label className="block text-gray-700 font-medium mb-2">评分</label>
+                    <label className="block text-gray-700 font-medium mb-2">{t('rating_label')}</label>
                     <div className="flex gap-2">
                       {[1, 2, 3, 4, 5].map(star => (
                         <button
@@ -425,11 +425,11 @@ export default function ProductDetail() {
                     </div>
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700 font-medium mb-2">评价内容</label>
+                    <label className="block text-gray-700 font-medium mb-2">{t('review_content_label')}</label>
                     <textarea
                       value={reviewComment}
                       onChange={(e) => setReviewComment(e.target.value)}
-                      placeholder="分享您的购买体验..."
+                      placeholder={t('review_placeholder')}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-pink-300 focus:ring-2 focus:ring-pink-100 outline-none resize-none"
                       rows={4}
                     />
@@ -440,7 +440,7 @@ export default function ProductDetail() {
                       disabled={submittingReview}
                       className="px-6 py-2 bg-pink-500 text-white rounded-xl hover:bg-pink-600 transition-colors font-medium disabled:opacity-50"
                     >
-                      {submittingReview ? '提交中...' : '提交评价'}
+                      {submittingReview ? t('submitting_review') : t('submit_review')}
                     </button>
                     <button
                       type="button"
@@ -451,7 +451,7 @@ export default function ProductDetail() {
                       }}
                       className="px-6 py-2 border border-gray-300 text-gray-600 rounded-xl hover:bg-gray-50 transition-colors font-medium"
                     >
-                      取消
+                      {t('cancel')}
                     </button>
                   </div>
                 </form>
@@ -466,7 +466,7 @@ export default function ProductDetail() {
                       {'★'.repeat(Math.round(reviewStats.avg_rating))}
                       <span className="text-gray-300">{'★'.repeat(5 - Math.round(reviewStats.avg_rating))}</span>
                     </div>
-                    <p className="text-gray-500 text-sm mt-1">{reviewStats.total} 条评价</p>
+                    <p className="text-gray-500 text-sm mt-1">{reviewStats.total} {t('reviews_count')}</p>
                   </div>
                   <div className="flex-1">
                     {[5, 4, 3, 2, 1].map(star => {
@@ -474,7 +474,7 @@ export default function ProductDetail() {
                       const percent = reviewStats.total > 0 ? (count / reviewStats.total * 100) : 0
                       return (
                         <div key={star} className="flex items-center gap-2 mb-1">
-                          <span className="text-sm text-gray-600 w-8">{star}星</span>
+                          <span className="text-sm text-gray-600 w-8">{star}{t('star_label')}</span>
                           <div className="flex-1 bg-gray-100 rounded-full h-2">
                             <div
                               className="bg-yellow-400 h-2 rounded-full transition-all"
@@ -491,7 +491,7 @@ export default function ProductDetail() {
 
               {/* 评价列表 */}
               {reviewsLoading ? (
-                <div className="text-center py-8 text-gray-500">加载评价中...</div>
+                <div className="text-center py-8 text-gray-500">{t('loading_reviews')}</div>
               ) : reviews.length > 0 ? (
                 <div className="space-y-6">
                   {reviews.map(review => (
@@ -508,7 +508,7 @@ export default function ProductDetail() {
                               <span className="text-gray-300">{'★'.repeat(5 - review.rating)}</span>
                             </div>
                             {review.is_verified && (
-                              <span className="text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full">已购买</span>
+                              <span className="text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full">{t('verified_purchase')}</span>
                             )}
                           </div>
                           <p className="text-gray-600 mt-2">{review.comment}</p>
@@ -530,7 +530,7 @@ export default function ProductDetail() {
               ) : (
                 <div className="text-center py-12">
                   <span className="text-6xl block mb-4">💐</span>
-                  <p className="text-gray-500">暂无评价，成为第一个评价的人吧！</p>
+                  <p className="text-gray-500">{t('no_reviews')}</p>
                 </div>
               )}
             </div>
@@ -541,7 +541,7 @@ export default function ProductDetail() {
       {/* 评价成功提示 */}
       {reviewSuccess && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50">
-          ✓ 评价提交成功，感谢您的反馈！
+          ✓ {t('review_success')}
         </div>
       )}
     </>
