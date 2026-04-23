@@ -17,6 +17,20 @@ export default function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
+  const [countdown, setCountdown] = useState(5)
+
+  // 重置成功时 5秒后自动跳转登录页
+  useEffect(() => {
+    if (status !== 'success') return
+    setCountdown(5)
+    const timer = setTimeout(() => {
+      window.location.href = '/login'
+    }, 5000)
+    const interval = setInterval(() => {
+      setCountdown(c => c > 1 ? c - 1 : 1)
+    }, 1000)
+    return () => { clearTimeout(timer); clearInterval(interval) }
+  }, [status])
 
   useEffect(() => {
     const urlCode = router.query.code
@@ -119,7 +133,8 @@ export default function ResetPassword() {
             <div className="bg-white rounded-3xl shadow-xl p-8 text-center">
               <div className="text-6xl mb-4">✅</div>
               <h2 className="text-2xl font-bold text-green-500 mb-4">密码重置成功！</h2>
-              <p className="text-gray-600 mb-6">请使用新密码登录您的账号</p>
+              <p className="text-gray-600 mb-2">请使用新密码登录您的账号</p>
+              <p className="text-gray-400 text-sm mb-6">{countdown}秒后自动跳转登录页面...</p>
               <Link href="/login" className="inline-block w-full py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-blue-200 transition-all">
                 返回登录
               </Link>

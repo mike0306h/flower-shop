@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -27,6 +27,20 @@ export default function Register() {
   const [loading, setLoading] = useState(false)
   const [sendLoading, setSendLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
+  const [countdown, setCountdown] = useState(5)
+
+  // step=2 时 5秒后自动跳转登录页
+  useEffect(() => {
+    if (step !== 2) return
+    setCountdown(5)
+    const timer = setTimeout(() => {
+      window.location.href = '/login'
+    }, 5000)
+    const interval = setInterval(() => {
+      setCountdown(c => c > 1 ? c - 1 : 1)
+    }, 1000)
+    return () => { clearTimeout(timer); clearInterval(interval) }
+  }, [step])
 
   if (isLoggedIn) {
     router.push('/profile')
@@ -251,7 +265,11 @@ export default function Register() {
               </button>
 
               <p className="text-center text-gray-500 text-sm">
-                <Link href="/login" className="text-pink-500 font-medium">返回登录</Link>
+                {countdown > 0 ? (
+                  <span>{countdown}秒后自动跳转登录页面...</span>
+                ) : (
+                  <Link href="/login" className="text-pink-500 font-medium hover:underline">返回登录</Link>
+                )}
               </p>
             </div>
           )}

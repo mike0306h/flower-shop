@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -16,6 +16,20 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [countdown, setCountdown] = useState(5)
+
+  // step=2 时 5秒后自动跳转登录页
+  useEffect(() => {
+    if (step !== 2) return
+    setCountdown(5)
+    const timer = setTimeout(() => {
+      window.location.href = '/login'
+    }, 5000)
+    const interval = setInterval(() => {
+      setCountdown(c => c > 1 ? c - 1 : 1)
+    }, 1000)
+    return () => { clearTimeout(timer); clearInterval(interval) }
+  }, [step])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -136,6 +150,9 @@ export default function ForgotPassword() {
                   <li>• 垃圾邮件文件夹</li>
                   <li>• 邮箱地址是否正确</li>
                 </ul>
+              </div>
+              <div className="text-center text-gray-500 text-sm mb-4">
+                {countdown > 0 ? <span>{countdown}秒后自动跳转登录页面...</span> : null}
               </div>
               <Link href="/login" className="inline-block w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-blue-200 transition-all">
                 返回登录
