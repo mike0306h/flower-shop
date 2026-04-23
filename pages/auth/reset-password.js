@@ -41,9 +41,9 @@ export default function ResetPassword() {
 
   const validate = () => {
     const errs = {}
-    if (!newPassword) errs.newPassword = '请输入新密码'
-    if (newPassword.length < 6) errs.newPassword = '密码至少6位'
-    if (newPassword !== confirmPassword) errs.confirmPassword = '两次密码不一致'
+    if (!newPassword) errs.newPassword = t('enter_new_password')
+    if (newPassword.length < 6) errs.newPassword = t('password_min6')
+    if (newPassword !== confirmPassword) errs.confirmPassword = t('passwords_not_match')
     setErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -73,7 +73,7 @@ export default function ResetPassword() {
 
   return (
     <>
-      <Head><title>重置密码 - {t('shop_name')}</title></Head>
+      <Head><title>{t('reset_password_title')} - {t('shop_name')}</title></Head>
       <Toast />
       <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-4">
         <div className="w-full max-w-md">

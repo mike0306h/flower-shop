@@ -101,7 +101,7 @@ export function CartProvider({ children }) {
 
   const clearCart = () => {
     setCart([])
-    showToast('购物车已清空', 'info')
+    showToast('Cart cleared', 'info')
   }
 
   /**

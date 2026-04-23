@@ -139,7 +139,7 @@ export default function Profile() {
           <div className="text-center">
             <span className="text-8xl block mb-6">🔐</span>
             <h2 className="text-2xl font-bold text-gray-800 mb-4">{t('please_login')}</h2>
-            <p className="text-gray-500 mb-6">登录后可查看订单和收藏</p>
+            <p className="text-gray-500 mb-6">{t('profile_login_desc') || '登录后可查看订单和收藏'}</p>
             <Link href="/login" className="inline-block px-6 py-3 bg-pink-500 text-white font-semibold rounded-full hover:bg-pink-600 transition-colors">
               {t('login')}
             </Link>
@@ -152,7 +152,7 @@ export default function Profile() {
   return (
     <>
       {lightboxSrc && (
-        <Lightbox src={lightboxSrc} alt="放大图片" onClose={() => setLightboxSrc(null)} />
+        <Lightbox src={lightboxSrc} alt={t("enlarge_image")} || "放大图片" onClose={() => setLightboxSrc(null)} />
       )}
       <Head><title>{t('profile')} - {t('shop_name')}</title></Head>
       <Toast />
@@ -194,7 +194,7 @@ export default function Profile() {
                   />
                 </div>
                 <p className="text-xs text-gray-500 mt-2">
-                  再消费 ฿{(memberData.next_level.threshold - memberData.total_spent).toFixed(0)} 升级到 {memberData.next_level.name}
+                  {t("spend_more_to_upgrade") || "再"}消费 ฿{(memberData.next_level.threshold - memberData.total_spent).toFixed(0)} 升级到 {memberData.next_level.name}
                 </p>
               </div>
             )}
@@ -248,7 +248,7 @@ export default function Profile() {
                           <div className="flex justify-between items-center mb-3">
                             <span className="text-sm text-gray-500 font-mono">{order.order_no}</span>
                             <span className="text-xs text-gray-400">
-                              {new Date(order.created_at).toLocaleDateString('zh-CN')}
+                              {new Date(order.created_at).toLocaleDateString(lang === 'th' ? 'th-TH' : lang === 'en' ? 'en-US' : 'zh-CN')}
                             </span>
                             <Link
                               href={`/order-tracking?orderId=${order.order_no}`}
@@ -284,11 +284,11 @@ export default function Profile() {
                           {/* 发货信息（shipped 状态） */}
                           {order.status === 'shipped' && (order.shipped_image || order.shipped_link) && (
                             <div className="p-3 bg-purple-50 rounded-xl border border-purple-100 mb-3">
-                              <p className="text-xs text-purple-600 mb-2 font-medium">📦 商品已发货</p>
+                              <p className="text-xs text-purple-600 mb-2 font-medium">{t("order_shipped_desc") || "商品已发货"}</p>
                               {order.shipped_image && (
                                 <img
                                   src={order.shipped_image}
-                                  alt="发货图片"
+                                  alt={t("shipping_image")} || "发货图片"
                                   className="w-full rounded-lg cursor-pointer hover:opacity-90"
                                   onClick={() => setLightboxSrc(order.shipped_image)}
                                 />
@@ -309,10 +309,10 @@ export default function Profile() {
                           {/* 收货图片（delivered 状态） */}
                           {order.status === 'delivered' && order.delivered_image && (
                             <div className="p-3 bg-green-50 rounded-xl border border-green-100 mb-3">
-                              <p className="text-xs text-green-600 mb-2 font-medium">💐 收货图片</p>
+                              <p className="text-xs text-green-600 mb-2 font-medium">{t("delivery_photo") || "收货图片"}</p>
                               <img
                                 src={order.delivered_image}
-                                alt="收货图片"
+                                alt={t("delivery_image")} || "收货图片"
                                 className="w-full rounded-lg cursor-pointer hover:opacity-90"
                                 onClick={() => setLightboxSrc(order.delivered_image)}
                               />

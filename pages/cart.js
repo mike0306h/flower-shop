@@ -51,7 +51,7 @@ export default function Cart() {
                         <h4 className="font-bold text-gray-800 hover:text-pink-500 cursor-pointer">{item.name}</h4>
                       </Link>
                       <p className="text-sm text-pink-500 font-medium">
-                        {item.flowerCount}朵 · ฿{item.price}/朵
+                        {item.flowerCount}{t('flowers_unit') || '朵'} · ฿{item.price}/{t('per_one') || '朵'}
                       </p>
                       <p className="text-lg font-bold text-pink-500 mt-1">
                         ฿{(item.price * item.qty).toLocaleString()}

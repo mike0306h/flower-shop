@@ -46,7 +46,7 @@ export default function Header() {
                 className="flex items-center gap-1 px-3 py-2 rounded-full hover:bg-pink-100 transition-colors text-sm"
               >
                 <span>{lang === 'zh' ? '🇨🇳' : lang === 'th' ? '🇹🇭' : '🇺🇸'}</span>
-                <span className="hidden md:inline">{lang === 'zh' ? '中文' : lang === 'th' ? 'ไทย' : 'EN'}</span>
+                <span className="hidden md:inline">{lang === 'zh' ? t('lang_zh') : lang === 'th' ? t('lang_th') : t('lang_en')}</span>
                 <span className="text-xs">▼</span>
               </button>
               {showLangMenu && (

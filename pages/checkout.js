@@ -130,7 +130,7 @@ export default function Checkout() {
         setCouponError('')
       }
     } catch (error) {
-      setCouponError(error.response?.data?.detail || t('coupon_failed') || '优惠券不可用')
+      setCouponError(error.response?.data?.detail || t('coupon_failed') || (t('coupon_not_available') || '优惠券不可用'))
       setAppliedCoupon(null)
     }
   }
@@ -203,7 +203,7 @@ export default function Checkout() {
         setOrderPlaced(true)
       } catch (error) {
         console.error('Order creation failed:', error)
-        setOrderError(error.response?.data?.detail || '订单创建失败，请稍后重试')
+        setOrderError(error.response?.data?.detail || (t('order_create_fail') || '订单创建失败，请稍后重试'))
       } finally {
         setPlacingOrder(false)
       }
@@ -244,7 +244,7 @@ export default function Checkout() {
   return (
     <>
       {lightboxSrc && (
-        <Lightbox src={lightboxSrc} alt="商品图片" onClose={() => setLightboxSrc(null)} />
+        <Lightbox src={lightboxSrc} alt={t("product_image")} onClose={() => setLightboxSrc(null)} />
       )}
       <Head><title>{t('checkout_title')} - {t('shop_name')}</title></Head>
       <Toast />
@@ -282,7 +282,7 @@ export default function Checkout() {
                         onClick={() => setShowCouponInput(!showCouponInput)}
                         className="text-sm text-pink-500 hover:underline"
                       >
-                        {showCouponInput ? '收起' : '使用优惠券'}
+                        {showCouponInput ? (t('collapse') || '收起') : (t('use_coupon') || '使用优惠券')}
                       </button>
                     )}
                   </div>
@@ -487,7 +487,7 @@ export default function Checkout() {
                       </div>
                       <div className="flex-1">
                         <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-gray-500">{item.flowerCount}朵 × {item.qty}份</p>
+                        <p className="text-sm text-gray-500">{item.flowerCount}{t("flowers_unit") || "朵"} × {item.qty}{t("units_unit") || "份"}</p>
                       </div>
                       <span className="font-bold text-pink-500">฿{(item.price * item.qty).toLocaleString()}</span>
                     </div>

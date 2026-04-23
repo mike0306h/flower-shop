@@ -8,9 +8,9 @@ import { getImageUrl } from '../utils/image'
 
 // 后端商品分类与翻译 key 的映射
 const CATEGORY_MAP = {
-  'bouquet': { id: 'bouquet', label: '花束' },
-  'rose': { id: 'rose', label: '玫瑰' },
-  'tulip': { id: 'tulip', label: '郁金香' },
+  'bouquet': { id: 'bouquet', label: t('shop') },
+  'rose': { id: 'rose', label: t('category_rose') },
+  'tulip': { id: 'tulip', label: t('category_tulip') },
   'tropical': { id: 'tropical', label: 'Tropical' },
 }
 
@@ -145,7 +145,7 @@ export default function ProductCard({ product }) {
               disabled={product.stock === 0 || !product.active}
               className="w-full py-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-pink-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {product.stock === 0 ? '暂时缺货' : !product.active ? '已下架' : t('add_to_cart')}
+              {product.stock === 0 ? t('temp_out_of_stock') : !product.active ? t('discontinued') : t('add_to_cart')}
             </button>
           </div>
         </div>

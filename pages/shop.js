@@ -83,7 +83,7 @@ export default function Shop() {
       setTotal(res.total)
     } catch (err) {
       console.error('Failed to load products:', err)
-      setError('加载商品失败，请稍后重试')
+      setError(t('products_load_error') || '加载商品失败，请稍后重试')
     } finally {
       setLoading(false)
     }

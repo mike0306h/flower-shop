@@ -47,26 +47,26 @@ export default function Coupons() {
 
   const getMinAmountLabel = (coupon) => {
     if (coupon.min_amount > 0) {
-      return `满฿${coupon.min_amount}可用`
+      return `${t('coupon_min_amount') || '满'}฿${coupon.min_amount}${t('coupon_available') || '可用'}`
     }
-    return '无门槛'
+    return t('coupon_no_threshold') || '无门槛'
   }
 
   const getExpiryLabel = (coupon) => {
-    if (!coupon.expires_at) return '长期有效'
+    if (!coupon.expires_at) return t('coupon_long_term') || '长期有效'
     const date = new Date(coupon.expires_at)
-    return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} 到期`
+    return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${t('expires') || '到期'}`
   }
 
   const getRemainingUses = (coupon) => {
-    if (coupon.max_uses === 0) return '无限次'
+    if (coupon.max_uses === 0) return t('coupon_unlimited') || '无限次'
     const remaining = coupon.max_uses - coupon.used_count
-    return `剩余 ${remaining} 次`
+    return `${t('coupon_remaining') || '剩余'} ${remaining} ${t('times') || '次'}`
   }
 
   return (
     <>
-      <Head><title>优惠券 - {t('shop_name')}</title></Head>
+      <Head><title>{t('coupons_title') || '优惠券'} - {t('shop_name')}</title></Head>
       <Toast />
       <main className="min-h-screen bg-gradient-to-b from-pink-50 to-white pb-16">
         <Header />
@@ -74,8 +74,8 @@ export default function Coupons() {
         {/* Hero */}
         <div className="bg-gradient-to-r from-pink-100 via-rose-50 to-pink-100 py-12 px-4">
           <div className="max-w-7xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">🎁 优惠券中心</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">领取专属优惠券，购物更优惠</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{t('coupon_center_title') || '🎁 优惠券中心'}</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">{t('coupon_center_desc') || '领取专属优惠券，购物更优惠'}</p>
           </div>
         </div>
 
@@ -123,7 +123,7 @@ export default function Coupons() {
                             : 'bg-pink-500 text-white hover:bg-pink-600'
                         }`}
                       >
-                        {copiedId === coupon.id ? '✓ 已复制' : '复制券码'}
+                        {copiedId === coupon.id ? (t('copied') || '✓ 已复制') : (t('copy_code') || '复制券码')}
                       </button>
                     </div>
                   </div>
@@ -131,8 +131,8 @@ export default function Coupons() {
                   <div className="px-4 pb-4">
                     <div className="text-xs text-gray-400 mt-2 pt-3 border-t border-gray-100">
                       {coupon.discount_type === 'percent'
-                        ? `折扣券 | 全场商品满${coupon.min_amount}元可用`
-                        : `立减券 | 全场商品满${coupon.min_amount}元可用`}
+                        ? `${t('discount_coupon_label') || '折扣券'} | ${t('coupon_desc') || '全场商品满'}${coupon.min_amount}${t('currency_unit') || '元可用'}`
+                        : `${t('flat_coupon_label') || '立减券'} | ${t('coupon_desc') || '全场商品满'}${coupon.min_amount}${t('currency_unit') || '元可用'}`}
                     </div>
                   </div>
                 </div>
@@ -144,8 +144,8 @@ export default function Coupons() {
           {!loading && coupons.length === 0 && (
             <div className="text-center py-16 bg-white rounded-2xl">
               <span className="text-6xl block mb-4">🎁</span>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">暂无优惠券</h3>
-              <p className="text-gray-500">关注店铺，第一时间获取优惠信息</p>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">{t('no_coupons') || '暂无优惠券'}</h3>
+              <p className="text-gray-500">{t('no_coupons_desc') || '关注店铺，第一时间获取优惠信息'}</p>
             </div>
           )}
 

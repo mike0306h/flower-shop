@@ -64,7 +64,7 @@ export function AuthProvider({ children }) {
 
       return { success: true }
     } catch (error) {
-      const message = error.response?.data?.detail || '登录失败，请稍后重试'
+      const message = error.response?.data?.detail || 'Login failed. Please try again.'
       return { success: false, error: message }
     }
   }
@@ -83,7 +83,7 @@ export function AuthProvider({ children }) {
 
       return { success: true }
     } catch (error) {
-      const message = error.response?.data?.detail || '注册失败，请稍后重试'
+      const message = error.response?.data?.detail || 'Registration failed. Please try again.'
       return { success: false, error: message }
     }
   }

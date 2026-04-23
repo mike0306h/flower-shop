@@ -36,7 +36,8 @@ export default function VerifyEmail() {
 
           setVerifiedEmail(email)
 
-          // 从 localStorage 读取注册时保存的临时数据
+          // 使用 localStorage 替代 sessionStorage，确保跨页面数据共享
+          // sessionStorage 在邮件链接打开新窗口时无法读取
           const stored = localStorage.getItem('pending_register')
           if (stored) {
             const { name, phone, password } = JSON.parse(stored)

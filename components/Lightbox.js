@@ -30,7 +30,7 @@ export default function Lightbox({ src, alt, onClose }) {
       {src && (
         <img
           src={src}
-          alt={alt || '放大图片'}
+          alt={alt || '{t('lightbox_zoom')}'}
           className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl cursor-zoom-out"
           onClick={(e) => e.stopPropagation()}
         />
